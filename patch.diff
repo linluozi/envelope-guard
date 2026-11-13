@@ -1,0 +1,17 @@
+diff --git a/envelope_guard/case_study.py b/envelope_guard/case_study.py
+index e09ffde..b1d038e 100644
+--- a/envelope_guard/case_study.py
++++ b/envelope_guard/case_study.py
+@@ -76,8 +76,10 @@ def _guard_no_ff_len64(data: bytes) -> bool:
+ 
+ 
+ def dispatch(baseline_fn, optimized_fn, guard_fn, data: bytes) -> bytes:
+-    """Naive integration: trust the fast path unconditionally."""
+-    return optimized_fn(data)
++    """Run the audited dispatch policy."""
++    if guard_fn(data):
++        return optimized_fn(data)
++    return baseline_fn(data)
+ 
+ 
+ def bench_dispatch_components(

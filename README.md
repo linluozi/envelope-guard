@@ -47,7 +47,9 @@ worst case is contained at 1.00x instead of bending to 0.14x**.
 Adversarial search found the hidden regression: worst-case raw speedup
 **0.1384x** on a **2-byte input**, minimized to the **2-byte witness `0xff 0xff`
 (0.1493x, 1-minimal, verified)**. The audit then refused the regression and
-picked guard `no_ff_len_ge_64`:
+picked guard `no_ff_len_ge_64` (the fit is measurement-driven; a re-run may
+select the equivalent safe guard `no_ff_len_ge_8` — the committed
+`certificate.json` is the reference run):
 
 - calibration (400 unique inputs): worst **1.0000x**, routed 12.5% to fast path, routed median 17.62x;
 - independent verification (48 boundary inputs): worst **1.0000x**, median 1.0000x,

@@ -11,6 +11,9 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 classifiers = ["Programming Language :: Python :: 3"]
 
+[project.scripts]
+envelope-guard = "envelope_guard.demo:main"
+
 [tool.setuptools.packages.find]
 include = ["envelope_guard*"]
 

@@ -44,6 +44,11 @@ faster on clean realistic text and the guard routes those inputs to it, the
 audited policy is ~35x faster than the reference loop, **while the adversarial
 worst case is contained at 1.00x instead of bending to 0.14x**.
 
+The table is the committed reference run (`benchmark/*.json`). A second,
+independent run measured 34.54x / 34.46x / 34.89x (~1.4% lower); single-process
+wall-clock timing drifts at that level, but the conclusion (all scales ≥1.15x,
+large ≥0.95x) is stable.
+
 Adversarial search found the hidden regression: worst-case raw speedup
 **0.1384x** on a **2-byte input**, minimized to the **2-byte witness `0xff 0xff`
 (0.1493x, 1-minimal, verified)**. The audit then refused the regression and
@@ -57,10 +62,13 @@ select the equivalent safe guard `no_ff_len_ge_8` — the committed
 
 ## Differential check
 
-1,207 unique inputs are diff-tested byte-for-byte (SHA-256 of outputs): boundary
-cases, images of every byte value 0–255, and 1,200 seeded unique random/live
-binary inputs. **0 mismatches.** Unique inputs are counted by SHA-256 dedup
-(1,207 distinct inputs, reported as a count, not loop iterations).
+**1,392 unique inputs** are diff-tested byte-for-byte (SHA-256 of outputs):
+1,200 in the main seeded test (10 boundary cases plus generated inputs, deduped
+to 1,200) unioned with every byte value 0–255; 64 single-byte values overlap the
+main set, so the deduplicated union is 1,392. **0 mismatches.** Unique inputs
+are counted by SHA-256 dedup, not by loop iterations. The certificate's
+`differential.checked_inputs=448` is a *separate scope*: the 400 adversarial
+search inputs plus 48 verification inputs compared inside the audit run.
 
 ## Evidence / gates
 
@@ -85,7 +93,7 @@ python3 -m unittest discover -s tests
 Gate results:
 
 - **G1 (tests)**: `python3 -m unittest discover -s tests` → 17 tests, 0 failures.
-- **G2 (differential)**: 1,207 unique inputs, 0 byte differences.
+- **G2 (differential)**: 1,392 unique inputs, 0 byte differences (1,200 main + every byte value 0–255, 64 overlaps).
 - **G3/E (envelope)**: adversarial worst contained from 0.1384x → 1.0000x by the fitted guard; verification worst 1.0000x; regression witness is 1-minimal (each single-byte deletion restores ≥0.6x).
 - **G4 (real corpus)**: dispatched median 34.40x / 34.92x / 34.96x on 6-doc realistic log corpus (median of the three **34.92x**), all three ≥1.15x; large scale ≥0.95x.
 - **G5 (memory)**: separate-process peak RSS on the 2 MiB corpus is 41,528 kB for baseline and 41,528 kB for the dispatched path (**1.000x**, no increase). Command: `/usr/bin/time -v python3 benchmark/rss_baseline.py` vs `/usr/bin/time -v python3 benchmark/rss_optimized.py`.

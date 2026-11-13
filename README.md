@@ -88,7 +88,7 @@ Gate results:
 - **G2 (differential)**: 1,207 unique inputs, 0 byte differences.
 - **G3/E (envelope)**: adversarial worst contained from 0.1384x → 1.0000x by the fitted guard; verification worst 1.0000x; regression witness is 1-minimal (each single-byte deletion restores ≥0.6x).
 - **G4 (real corpus)**: dispatched median 34.40x / 34.92x / 34.96x on 6-doc realistic log corpus (median of the three **34.92x**), all three ≥1.15x; large scale ≥0.95x.
-- **G5 (memory)**: peak RSS is measured in `benchmark/optimized.json` (baseline/optimized reported in `benchmark/baseline.json` / `benchmark/optimized.json`).
+- **G5 (memory)**: separate-process peak RSS on the 2 MiB corpus is 41,528 kB for baseline and 41,528 kB for the dispatched path (**1.000x**, no increase). Command: `/usr/bin/time -v python3 benchmark/rss_baseline.py` vs `/usr/bin/time -v python3 benchmark/rss_optimized.py`.
 - **Certificate independence**: `verify_certificate()` recomputes the witness speedup, re-runs every single-byte deletion, and recomputes the dispatch stats from raw samples; tampering with the speedup or median is detected.
 
 ## patch.diff

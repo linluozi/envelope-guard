@@ -89,6 +89,16 @@ Gate results:
 - **G5 (memory)**: peak RSS is measured in `benchmark/optimized.json` (baseline/optimized reported in `benchmark/baseline.json` / `benchmark/optimized.json`).
 - **Certificate independence**: `verify_certificate()` recomputes the witness speedup, re-runs every single-byte deletion, and recomputes the dispatch stats from raw samples; tampering with the speedup or median is detected.
 
+## patch.diff
+
+`patch.diff` records the integration change: the naive version trusted the fast
+path unconditionally; the audited version routes through the fitted guard and
+falls back to baseline. It is a reverse-applicable artifact on this tree:
+
+```bash
+git apply --reverse --check patch.diff   # passes on the guarded tree
+```
+
 ## Environment
 
 - CPU: AMD EPYC 7K62 (per `benchmark/*.json` `cpu_model`)

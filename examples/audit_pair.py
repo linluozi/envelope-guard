@@ -30,7 +30,7 @@ result = search_worst_case(
     baseline,
     optimized,
     [b"hello", b"clean realistic text " * 8, b"\x00"],
-    budget=250,
+    budget=600,
     seed=7,
 )
 witness, one_minimal, checks = minimize_witness(
@@ -38,5 +38,8 @@ witness, one_minimal, checks = minimize_witness(
 )
 guard, _ = fit_guard(result.observations)
 stats = evaluate_dispatch(guard, result.observations)
-print(f"worst={result.worst.speedup:.4f}x witness={witness.hex()} 1-minimal={one_minimal} checks={checks}")
+if result.worst.speedup >= 0.4:
+    print(f"no sub-0.4x witness found in this run (worst {result.worst.speedup:.4f}x); try a larger budget")
+else:
+    print(f"worst={result.worst.speedup:.4f}x witness={witness.hex()} 1-minimal={one_minimal} checks={checks}")
 print(f"guard={guard.name} worst-after-dispatch={stats.worst_speedup:.4f}x route={stats.route_fraction:.2%}")

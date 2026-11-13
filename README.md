@@ -92,7 +92,7 @@ python3 -m unittest discover -s tests
 
 Gate results:
 
-- **G1 (tests)**: `python3 -m unittest discover -s tests` → 17 tests, 0 failures.
+- **G1 (tests)**: `python3 -m unittest discover -s tests` → 18 tests, 0 failures.
 - **G2 (differential)**: 1,392 unique inputs, 0 byte differences (1,200 main + every byte value 0–255, 64 overlaps).
 - **G3/E (envelope)**: adversarial worst contained from 0.1384x → 1.0000x by the fitted guard; verification worst 1.0000x; regression witness is 1-minimal (each single-byte deletion restores ≥0.6x).
 - **G4 (real corpus)**: dispatched median 34.40x / 34.92x / 34.96x on 6-doc realistic log corpus (median of the three **34.92x**), all three ≥1.15x; large scale ≥0.95x.
